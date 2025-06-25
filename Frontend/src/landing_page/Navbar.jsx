@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function OpenAccount() {
+export default function Navbar() {
   return (
     <div>
-        OpenAccont
+        Navbar
     </div>
   )
 }
