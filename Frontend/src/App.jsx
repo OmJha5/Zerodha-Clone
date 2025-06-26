@@ -3,12 +3,12 @@ import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom'
 import HomePage from './landing_page/home/HomePage'
 import Signup from './landing_page/signup/Signup'
 import AboutPage from './landing_page/about/AboutPage'
-import Hero from './landing_page/products/Hero'
 import PricingPage from './landing_page/pricing/PricingPage'
 import SupportPage from './landing_page/support/SupportPage'
 import Navbar from './landing_page/Navbar'
 import Footer from './landing_page/Footer'
 import NotFound from './landing_page/NotFound'
+import ProductPage from './landing_page/products/ProductPage'
 
 // ✅ Layout component including Navbar and Footer
 function Layout() {
@@ -30,7 +30,7 @@ const appRouter = createBrowserRouter([
       { path: '/', element: <HomePage /> },
       { path: '/signup', element: <Signup /> },
       { path: '/about', element: <AboutPage /> },
-      { path: '/products', element: <Hero /> },
+      { path: '/products', element: <ProductPage/> },
       { path: '/pricing', element: <PricingPage /> },
       { path: '/support', element: <SupportPage /> },
       { path: '*', element: <NotFound /> },
