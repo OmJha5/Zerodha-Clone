@@ -7,6 +7,7 @@ import { updateStocks } from "./utils/updateStockSymbols.js";
 import userRouter from "./routes/user.route.js"
 import orderRouter from "./routes/order.route.js"
 import holdingRouter from "./routes/holding.route.js"
+import fundsRouter from "./routes/funds.route.js"
 
 const app = express();
 dotenv.config({})
@@ -162,6 +163,7 @@ setInterval(updateStocks, 15 * 60 * 1000);
 app.use("/api/user" , userRouter)
 app.use("/api/order" , orderRouter)
 app.use("/api/holding" , holdingRouter)
+app.use("/api/funds" , fundsRouter)
 
 
 app.listen(port, () => {

@@ -5,6 +5,7 @@ import axios from 'axios';
 import { setUser } from '../redux/authSlice';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export default function Signup() {
     let dispatch = useDispatch();
@@ -34,6 +35,7 @@ export default function Signup() {
             })
 
             if (res.data.success) {
+                toast.success("Registration is successfull!")
                 dispatch(setUser(res.data.user.name));
                 navigate("/");
                 setInput({
@@ -45,7 +47,10 @@ export default function Signup() {
 
         }
         catch (e) {
-            console.log(e);
+            if(e?.response?.data?.message){
+                toast.error(e.response.data.message);
+            }
+            else toast.error("Internal Server Error!")
         }
     }
 

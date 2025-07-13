@@ -33,6 +33,7 @@ router.post("/signin" , async(req , res) => {
         const tokenData = {
             email : user.email,
             name : user.name,
+            id : user._id,
         }
 
         const token = jwt.sign(tokenData , process.env.SECRET_KEY , {expiresIn : "7d"})
@@ -97,6 +98,7 @@ router.post("/signup" , async(req , res) => {
         const tokenData = {
             email : newUser.email,
             name : newUser.name,
+            id : newUser._id,
         }
 
         const token = jwt.sign(tokenData , process.env.SECRET_KEY , {expiresIn : "7d"})

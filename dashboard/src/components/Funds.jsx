@@ -1,84 +1,83 @@
 import React from 'react'
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import AddFundsDialog from './AddFundsDialog';
+import { FUNDS_API_ENDPOINT } from "../../utils/apiendpoint";
+import axios from "axios";
+import { setFunds } from '../redux/fundSlice';
+import WithdrawFundsDialog from './WithdrawFundsDialog';
 
 export default function Funds() {
+  let dispatch = useDispatch();
+  let availableMargin = useSelector((state) => state.funds.availableMargin);
+  let [openAdd, setOpenAdd] = useState(false);
+  let [openWith, setOpenWith] = useState(false);
+
+  let handleAddSubmit = async (amount) => {
+    try {
+      let res = await axios.post(`${FUNDS_API_ENDPOINT}/addfunds`, { fund: amount } , {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        withCredentials: true
+      })
+
+      if(res.data.success){
+        dispatch(setFunds(res.data.availableMargin))
+      }
+
+    }
+    catch{
+      console.log(e);
+    }
+  }
+
+  let handleWithSubmit = async (amount) => {
+    try {
+      let res = await axios.post(`${FUNDS_API_ENDPOINT}/withdrawfunds`, { fund: amount } , {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        withCredentials: true
+      })
+
+      if(res.data.success){
+        dispatch(setFunds(res.data.availableMargin))
+      }
+
+    }
+    catch{
+      console.log(e);
+    }
+  }
+
   return (
-    <div>
-      <div className="funds">
-        <p>Instant, zero-cost fund transfers with UPI </p>
-        <Link className="btn btn-green">Add funds</Link>
-        <Link className="btn btn-blue">Withdraw</Link>
-      </div>
+    <div className="container mt-5" style={{ maxWidth: '500px' }}>
+      <div className="card shadow rounded p-3">
+        <h5 className="mb-3">Funds Summary</h5>
+        <ul className="list-group list-group-flush mb-3">
+          <li className="list-group-item d-flex justify-content-between">
+            <span>Available Margin</span>
+            <strong>₹ {availableMargin.toFixed(2)}</strong>
+          </li>
+        </ul>
+        <div className="d-flex gap-2">
+          <button className="btn btn-success flex-fill" onClick={() => setOpenAdd(true)}>Add Funds</button>
 
-      <div className="row">
-        <div className="col">
-          <span>
-            <p>Equity</p>
-          </span>
+          <AddFundsDialog
+            open={openAdd}
+            onClose={() => setOpenAdd(false)}
+            onSubmit={handleAddSubmit}
+          />
 
-          <div className="table">
-            <div className="data">
-              <p>Available margin</p>
-              <p className="imp colored">4,043.10</p>
-            </div>
-            <div className="data">
-              <p>Used margin</p>
-              <p className="imp">3,757.30</p>
-            </div>
-            <div className="data">
-              <p>Available cash</p>
-              <p className="imp">4,043.10</p>
-            </div>
-            <hr />
-            <div className="data">
-              <p>Opening Balance</p>
-              <p>4,043.10</p>
-            </div>
-            <div className="data">
-              <p>Opening Balance</p>
-              <p>3736.40</p>
-            </div>
-            <div className="data">
-              <p>Payin</p>
-              <p>4064.00</p>
-            </div>
-            <div className="data">
-              <p>SPAN</p>
-              <p>0.00</p>
-            </div>
-            <div className="data">
-              <p>Delivery margin</p>
-              <p>0.00</p>
-            </div>
-            <div className="data">
-              <p>Exposure</p>
-              <p>0.00</p>
-            </div>
-            <div className="data">
-              <p>Options premium</p>
-              <p>0.00</p>
-            </div>
-            <hr />
-            <div className="data">
-              <p>Collateral (Liquid funds)</p>
-              <p>0.00</p>
-            </div>
-            <div className="data">
-              <p>Collateral (Equity)</p>
-              <p>0.00</p>
-            </div>
-            <div className="data">
-              <p>Total Collateral</p>
-              <p>0.00</p>
-            </div>
-          </div>
-        </div>
+          <button className="btn btn-danger flex-fill" onClick={() => setOpenWith(true)}>Withdraw Funds</button>
 
-        <div className="col">
-          <div className="commodity">
-            <p>You don't have a commodity account</p>
-            <Link className="btn btn-blue">Open Account</Link>
-          </div>
+          <WithdrawFundsDialog
+            open={openWith}
+            onClose={() => setOpenWith(false)}
+            onSubmit={handleWithSubmit}
+          />
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { USER_API_ENDPOINT } from "../../utils/apiendpoint";
 import { setUser } from "../redux/authSlice";
 
-const useCheckUser = () => {
+const useCheckUser = (onChecked) => {
     let dispatch = useDispatch();
     let navigate = useNavigate();
 
@@ -17,7 +17,6 @@ const useCheckUser = () => {
                 });
 
                 if(res.data.success){
-                    console.log(res.data.name)
                     dispatch(setUser(res.data.name));
                     return;
                 }

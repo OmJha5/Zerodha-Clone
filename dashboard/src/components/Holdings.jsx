@@ -11,14 +11,13 @@ export default function Holdings() {
   useEffect(() => {
     const fetchHoldings = async () => {
       try {
-        let response = await axios.get(`${HOLDING_API_ENDPOINT}/allHoldings`);
+        let response = await axios.get(`${HOLDING_API_ENDPOINT}/allHoldings` , {withCredentials : true});
         
         if(response.data.success){
           setAllHoldings(response.data.allHoldings);
         }
       } 
       catch (error) {
-        console.log(`${HOLDING_API_ENDPOINT}/allHoldings`)
         console.error('Failed to fetch holdings', error);
       }
     };
