@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect } from 'react';
 import axios from "axios";
 import { useState } from 'react';
+import { HOLDING_API_ENDPOINT } from '../../utils/apiendpoint';
 
 export default function Holdings() {
 
@@ -10,10 +11,14 @@ export default function Holdings() {
   useEffect(() => {
     const fetchHoldings = async () => {
       try {
-        let response = await axios.get("http://localhost:8080/allHoldings");
-        setAllHoldings(response.data);
+        let response = await axios.get(`${HOLDING_API_ENDPOINT}/allHoldings`);
+        
+        if(response.data.success){
+          setAllHoldings(response.data.allHoldings);
+        }
       } 
       catch (error) {
+        console.log(`${HOLDING_API_ENDPOINT}/allHoldings`)
         console.error('Failed to fetch holdings', error);
       }
     };

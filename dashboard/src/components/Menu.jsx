@@ -1,6 +1,6 @@
 import React , {useState} from 'react'
 import {Link} from "react-router-dom"
-
+import UserSection from "./UserSection"
 export default function Menu() {
 
   const [selectedMenu , setSelectedMenu] = useState(0);
@@ -41,20 +41,8 @@ export default function Menu() {
           </li>
 
           <li>
-            <Link style={{textDecoration : "none"}} to="/positions" onClick={() => handleMenuClick(3)}>
-              <p className={selectedMenu == 3 ? activeMenuClass : menuClass}>Positions</p>
-            </Link>
-          </li>
-
-          <li>
-            <Link style={{textDecoration : "none"}} to="/funds" onClick={() => handleMenuClick(4)}>
-              <p className={selectedMenu == 4 ? activeMenuClass : menuClass}>Funds</p>
-            </Link>
-          </li>
-
-          <li>
-            <Link style={{textDecoration : "none"}} to="/apps" onClick={() => handleMenuClick(5)}>
-              <p className={selectedMenu == 5 ? activeMenuClass : menuClass}>Apps</p>
+            <Link style={{textDecoration : "none"}} to="/funds" onClick={() => handleMenuClick(3)}>
+              <p className={selectedMenu == 3 ? activeMenuClass : menuClass}>Funds</p>
             </Link>
           </li>
 
@@ -62,10 +50,7 @@ export default function Menu() {
 
         <hr />
 
-        <div className="profile">
-          <div className="avatar">ZU</div>
-          <p className="username">USERID</p>
-        </div>
+        <UserSection/>
       </div>
     </div>
   )

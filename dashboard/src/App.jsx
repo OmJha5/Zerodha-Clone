@@ -6,9 +6,10 @@ import Dashboard from "./components/Dashboard";
 import Summary from "./components/Summary";
 import Orders from "./components/Orders";
 import Holdings from "./components/Holdings";
-import Positions from "./components/Positions";
 import Funds from "./components/Funds";
 import Apps from "./components/Apps";
+import Signup from "./components/signup";
+import Signin from "./components/signin";
 
 // build router
 const appRouter = createBrowserRouter([
@@ -23,12 +24,21 @@ const appRouter = createBrowserRouter([
           { index: true, element: <Summary /> }, // path="/" shows Summary
           { path: "/orders", element: <Orders /> },
           { path: "/holdings", element: <Holdings /> },
-          { path: "/positions", element: <Positions /> },
           { path: "/funds", element: <Funds /> },
           { path: "/apps", element: <Apps /> },
         ]
       }
     ]
+  },
+
+  {
+    path : "/signup",
+    element : <Signup/>
+  },
+
+  {
+    path : "/signin",
+    element : <Signin/>
   }
 ]);
 

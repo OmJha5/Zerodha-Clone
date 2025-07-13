@@ -3,14 +3,16 @@ import cors from "cors"
 import dotenv from "dotenv"
 import cookieParser from "cookie-parser"
 import connectDB from "./utils/db.js";
-import { Holding } from "./models/holding.models.js";
-import { Position } from "./models/position.models.js";
+import { updateStocks } from "./utils/updateStockSymbols.js";
+import userRouter from "./routes/user.route.js"
+import orderRouter from "./routes/order.route.js"
+import holdingRouter from "./routes/holding.route.js"
 
 const app = express();
 dotenv.config({})
 let port = process.env.PORT || 4000;
 
-app.use(express.urlencoded({extended : true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 const corsOptions = {
@@ -150,18 +152,19 @@ app.use(cookieParser());
 //     response.send("Done!")
 // })
 
-app.get("/allHoldings" , async(req , res) => {
-    let allHoldings = await Holding.find({});
-    res.json(allHoldings);
-})
+// run immediately at start
+updateStocks();
 
-app.get("/allPositions" , async(req , res) => {
-    let allPositions = await Position.find({});
-    res.json(allPositions);
-})
+// then run every 15 min
+setInterval(updateStocks, 15 * 60 * 1000);
+
+// API's
+app.use("/api/user" , userRouter)
+app.use("/api/order" , orderRouter)
+app.use("/api/holding" , holdingRouter)
 
 
-app.listen(port , () => {
+app.listen(port, () => {
     connectDB();
     console.log(`App is listening on port ${port}`);
 })
