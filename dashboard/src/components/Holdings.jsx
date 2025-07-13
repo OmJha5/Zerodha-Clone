@@ -1,10 +1,29 @@
 import React from 'react'
-import { holdings } from '../data/data'
+import { useEffect } from 'react';
+import axios from "axios";
+import { useState } from 'react';
 
 export default function Holdings() {
+
+  let [allHoldings, setAllHoldings] = useState([]);
+
+  useEffect(() => {
+    const fetchHoldings = async () => {
+      try {
+        let response = await axios.get("http://localhost:8080/allHoldings");
+        setAllHoldings(response.data);
+      } 
+      catch (error) {
+        console.error('Failed to fetch holdings', error);
+      }
+    };
+
+    fetchHoldings();
+  }, []);
+
   return (
     <div>
-      <h3 className="title">Holdings ({holdings.length})</h3>
+      <h3 className="title">Holdings ({allHoldings.length})</h3>
 
       <div className="order-table">
         <table>
@@ -19,23 +38,23 @@ export default function Holdings() {
             <th>Day chg.</th>
           </tr>
 
-          {holdings.map((stock , ind) => {
-              const currValue = stock.price * stock.qty;
-              const isProfit = currValue - (stock.avg * stock.qty) >= 0.0;
-              const profClass = isProfit ? "profit" : "loss";
-              const dayClass = stock.isLoss ? "loss" : "profit";
-              
-              return <tr key={ind}>
-                  <td>{stock.name}</td>
-                  <td>{stock.qty}</td>
-                  <td>{stock.avg.toFixed(2)}</td>
-                  <td>{stock.price.toFixed(2)}</td>
-                  <td>{currValue.toFixed(2)}</td>
-                  <td className={profClass}>{(currValue - (stock.avg * stock.qty)).toFixed(2)}</td>
-                  <td className={profClass}>{stock.net}</td>
-                  <td className={dayClass}>{stock.day}</td>
+          {allHoldings.map((stock, ind) => {
+            const currValue = stock.price * stock.qty;
+            const isProfit = currValue - (stock.avg * stock.qty) >= 0.0;
+            const profClass = isProfit ? "profit" : "loss";
+            const dayClass = stock.isLoss ? "loss" : "profit";
 
-              </tr>
+            return <tr key={ind}>
+              <td>{stock.name}</td>
+              <td>{stock.qty}</td>
+              <td>{stock.avg?.toFixed(2)}</td>
+              <td>{stock.price?.toFixed(2)}</td>
+              <td>{currValue?.toFixed(2)}</td>
+              <td className={profClass}>{(currValue - (stock.avg * stock.qty)).toFixed(2)}</td>
+              <td className={profClass}>{stock.net}</td>
+              <td className={dayClass}>{stock.day}</td>
+
+            </tr>
           })}
 
         </table>
