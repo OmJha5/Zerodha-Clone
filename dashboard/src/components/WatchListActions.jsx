@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Tooltip , Grow} from "@mui/material";
 import BarChartOutlined from '@mui/icons-material/BarChartOutlined';
 import { MoreHoriz } from '@mui/icons-material';
+import BuyDialog from './BuyDialog';
 
-export default function WatchListActions({uid}) {
+export default function WatchListActions({stock}) {
+  let [openBuy , setOpenBuy] = useState(false)
+  
   return (
     <span className="actions">
       <span>
@@ -11,7 +14,7 @@ export default function WatchListActions({uid}) {
             title="Buy (B)"
             placement="top"
         >
-            <button className='buy'>Buy</button>
+            <button className='buy' onClick={() => setOpenBuy(true)}>Buy</button>
         </Tooltip> 
       </span>  
 
@@ -47,6 +50,9 @@ export default function WatchListActions({uid}) {
 
         </Tooltip> 
       </span>  
+
+      {/* Dialog box when user clicks on buy button */}
+      <BuyDialog open={openBuy} close={() => setOpenBuy(false)} stock={stock} /> 
 
 
     </span>

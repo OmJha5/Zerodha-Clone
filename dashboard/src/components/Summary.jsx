@@ -1,10 +1,14 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 export default function Summary() {
+  let user = useSelector((state) => state.auth.user)
+  let funds = useSelector((state) => state.funds.availableMargin)
+
   return (
     <div>
       <div className="username">
-        <h6>Hi, User!</h6>
+        <h6>Hi, <b>{user}</b> </h6>
         <hr className="divider" />
       </div>
 
@@ -15,7 +19,7 @@ export default function Summary() {
 
         <div className="data">
           <div className="first">
-            <h3>3.74k</h3>
+            <h3>{funds}</h3>
             <p>Margin available</p>
           </div>
           <hr />

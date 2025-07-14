@@ -1,12 +1,17 @@
 import mongoose from "mongoose";
+import User from "./user.models.js"
 
 const holdingSchema = new mongoose.Schema({
     name : {type : String},
     qty : {type : Number},
     avg : {type : Number},
     price : {type : Number},
-    net : {type : String},
-    day : {type : String},
+    net : {type : Number},
+    day : {type : Number},
+    user : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "User"
+    }
 })
 
 const Holding = mongoose.model("Holding" , holdingSchema);

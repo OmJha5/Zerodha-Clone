@@ -8,6 +8,7 @@ import userRouter from "./routes/user.route.js"
 import orderRouter from "./routes/order.route.js"
 import holdingRouter from "./routes/holding.route.js"
 import fundsRouter from "./routes/funds.route.js"
+import stocksRouter from "./routes/stocks.route.js"
 
 const app = express();
 dotenv.config({})
@@ -164,6 +165,7 @@ app.use("/api/user" , userRouter)
 app.use("/api/order" , orderRouter)
 app.use("/api/holding" , holdingRouter)
 app.use("/api/funds" , fundsRouter)
+app.use("/api/stocks" , stocksRouter)
 
 
 app.listen(port, () => {

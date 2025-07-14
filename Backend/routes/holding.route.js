@@ -4,7 +4,9 @@ import isAuthenticated from "../utils/isAuthenticated.js";
 const router = express.Router();
 
 router.get("/allHoldings", isAuthenticated , async (req, res) => {
-    let allHoldings = await Holding.find({});
+    let id = req.id;
+
+    let allHoldings = await Holding.find({user : id});
     res.json({
         success: true,
         allHoldings

@@ -17,23 +17,23 @@ export default function WatchListItem({stock}) {
   return (
     <li onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         <div className="item">
-            <p className={stock.isDown ? "down" : "up"}>{stock.name}</p>
+            <p className={stock.dayChange < 0 ? "down" : "up"}>{stock.name}</p>
 
             {
                 !showWatchListActions && (
                     <div className="itemInfo d-flex gap-3">
-                        <span className="percent">{stock.percent}</span>
+                        <span className="percent">{stock.dayChange.toFixed(2)}</span>
 
-                        {stock.isDown ? <KeyboardArrowDown className='down' /> : <KeyboardArrowUp className='up'  />} 
+                        {stock.dayChange < 0 ? <KeyboardArrowDown className='down' /> : <KeyboardArrowUp className='up'  />} 
 
-                        <span className="price">{stock.price}</span>
+                        <span className="price">{stock.lastPrice.toFixed(2)}</span>
                     </div>
                 )
             }
 
         </div>
 
-        {showWatchListActions && <WatchListActions uid={stock} />}
+        {showWatchListActions && <WatchListActions stock={stock} />}
     </li>
   )
 }
