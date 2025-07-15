@@ -8,8 +8,8 @@ import Orders from "./components/Orders";
 import Holdings from "./components/Holdings";
 import Funds from "./components/Funds";
 import Apps from "./components/Apps";
-import Signup from "./components/signup";
-import Signin from "./components/signin";
+import Signup from "./components/Signup";
+import Signin from "./components/Signin";
 
 // build router
 const appRouter = createBrowserRouter([
