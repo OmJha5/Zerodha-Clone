@@ -81,7 +81,7 @@ export default function Summary() {
         <div className="data">
           <div className="first">
             <h3 className={holding.currValue > holding.investment ? "profit" : "loss"}>
-              {(holding.currValue - holding.investment).toFixed(2)} <small>{(((holding.currValue - holding.investment) / holding.investment) * 100).toFixed(2)}</small>{" "}
+              {(holding.currValue - holding.investment).toFixed(2)} <small>{(((holding.currValue - holding.investment) / holding.investment) * 100).toFixed(2)}%</small>{" "}
             </h3>
             <p>P&L</p>
           </div>
