@@ -3,10 +3,13 @@ import { useEffect } from 'react';
 import axios from "axios";
 import { useState } from 'react';
 import { HOLDING_API_ENDPOINT } from '../../utils/apiendpoint';
+import { VerticalChart } from './Chartjs/VerticalChart';
+import { useDispatch, useSelector } from 'react-redux';
+import { setHoldings } from '../redux/holdingSlice';
 
 export default function Holdings() {
-
-  let [allHoldings, setAllHoldings] = useState([]);
+  let dispatch = useDispatch();
+  let allHoldings = useSelector((state) => state.holding.holdings);
 
   useEffect(() => {
     const fetchHoldings = async () => {
@@ -14,7 +17,7 @@ export default function Holdings() {
         let response = await axios.get(`${HOLDING_API_ENDPOINT}/allHoldings` , {withCredentials : true});
         
         if(response.data.success){
-          setAllHoldings(response.data.allHoldings);
+          dispatch(setHoldings(response.data.allHoldings));
         }
       } 
       catch (error) {
@@ -24,6 +27,20 @@ export default function Holdings() {
 
     fetchHoldings();
   }, []);
+
+  // Below is Chartjs code
+  const labels = allHoldings.map((h) => h.name);
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'Stock Price',
+        data: allHoldings.map((h) => h.price),
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+    ],
+  };
 
   return (
     <div>
@@ -41,7 +58,7 @@ export default function Holdings() {
             <th>Day chg.</th>
           </tr>
 
-          {allHoldings.map((stock, ind) => {
+          {allHoldings?.map((stock, ind) => {
             const currValue = stock.price * stock.qty;
             const oldValue = stock.avg * stock.qty;
             const isProfit = currValue - (stock.avg * stock.qty) >= 0.0;
@@ -53,14 +70,18 @@ export default function Holdings() {
               <td>{stock.qty}</td>
               <td>{stock.avg?.toFixed(2)}</td>
               <td>{stock.price?.toFixed(2)}</td>
-              <td className={profClass}>{(currValue - oldValue).toFixed(2)}</td>
-              <td className={profClass}>{(((currValue - oldValue) / oldValue) * 100).toFixed(2)}%</td>
-              <td className={dayClass}>{(stock.day).toFixed(2)}%</td>
+              <td className={profClass}>{(currValue - oldValue)?.toFixed(2)}</td>
+              <td className={profClass}>{(((currValue - oldValue) / oldValue) * 100)?.toFixed(2)}%</td>
+              <td className={dayClass}>{(stock.day)?.toFixed(2)}%</td>
 
             </tr>
           })}
 
         </table>
+      </div>
+
+      <div className='p-5'>
+        <VerticalChart data={data} />
       </div>
       
     </div>

@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { STOCKS_API_ENDPOINT } from '../../utils/apiendpoint';
 import { setFunds } from '../redux/fundSlice';
+import { setOrders } from '../redux/orderSlice';
+import { setHoldings } from '../redux/holdingSlice';
 
 export default function SellDialog({ open, close, stock }) {
     let dispatch = useDispatch();
@@ -17,15 +19,17 @@ export default function SellDialog({ open, close, stock }) {
 
     let handleSubmit = async () => {
         try {
-            let res = await axios.post(`${STOCKS_API_ENDPOINT}/sellStock`, { stock, qty: input.qty, amount: input.amount , funds}, {
+            let res = await axios.post(`${STOCKS_API_ENDPOINT}/sellStock`, { stock, qty: input.qty, amount: input.amount, funds }, {
                 headers: {
                     "Content-Type": "application/json"
                 },
                 withCredentials: true
             })
-            
+
             if (res.data.success) {
                 dispatch(setFunds(res.data.availableMargin))
+                dispatch(setOrders(res.data.allOrders));
+                dispatch(setHoldings(res.data.allHoldings));
                 toast.success(res.data.message)
                 close();
             }

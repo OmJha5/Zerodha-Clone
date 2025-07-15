@@ -3,10 +3,12 @@ import { useEffect } from 'react';
 import axios from "axios";
 import { useState } from 'react';
 import { ORDER_API_ENDPOINT } from '../../utils/apiendpoint';
+import { setOrders } from '../redux/orderSlice';
+import {useDispatch, useSelector} from "react-redux"
 
 export default function Holdings() {
-
-  let [allOrders, setAllOrders] = useState([]);
+  let dispatch = useDispatch();
+  let allOrders = useSelector((state) => state.order.orders);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -14,7 +16,7 @@ export default function Holdings() {
         let response = await axios.get(`${ORDER_API_ENDPOINT}/allOrders`, { withCredentials: true });
 
         if (response.data.success) {
-          setAllOrders(response.data.allOrders);
+          dispatch(setOrders(response.data.allOrders));
         }
       }
       catch (e) {

@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { STOCKS_API_ENDPOINT } from '../../utils/apiendpoint';
 import { setFunds } from '../redux/fundSlice';
+import { setOrders } from '../redux/orderSlice';
+import { setHoldings } from '../redux/holdingSlice';
 
 export default function BuyDialog({ open, close, stock }) {
     let dispatch = useDispatch();
@@ -27,6 +29,8 @@ export default function BuyDialog({ open, close, stock }) {
 
                 if(res.data.success){
                     dispatch(setFunds(res.data.availableMargin))
+                    dispatch(setOrders(res.data.allOrders));
+                    dispatch(setHoldings(res.data.allHoldings));
                     toast.success(res.data.message)
                     close(); 
                 }

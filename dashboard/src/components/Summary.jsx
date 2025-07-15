@@ -56,7 +56,7 @@ export default function Summary() {
 
         <div className="data">
           <div className="first">
-            <h3>{funds}</h3>
+            <h3>₹{funds}</h3>
             <p>Margin available</p>
           </div>
           <hr />
@@ -89,10 +89,10 @@ export default function Summary() {
 
           <div className="second">
             <p>
-              Current Value <span>{(holding.currValue).toFixed(2)}</span>{" "}
+              Current Value <span>₹{(holding.currValue).toFixed(2)}</span>{" "}
             </p>
             <p>
-              Investment <span>{(holding.investment).toFixed(2)}</span>{" "}
+              Investment <span>₹{(holding.investment).toFixed(2)}</span>{" "}
             </p>
           </div>
         </div>

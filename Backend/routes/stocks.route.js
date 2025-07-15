@@ -24,9 +24,33 @@ router.get("/allStocks", isAuthenticated, async (req, res) => {
 
 })
 
+let findAllHoldings = async (id) => {
+    let allHoldings = await Holding.find({ user: id });
+    let symbols = allHoldings.map((h) => h.name);
+
+    let stocks = await Stock.find({ symbol: { $in: symbols } })
+    let stockMap = {}
+
+    for (let stock of stocks) {
+        stockMap[stock.symbol] = stock;
+    }
+
+    let allValidHoldings = allHoldings.map((holding) => {
+        let liveStock = stockMap[holding.name]
+
+        return {
+            ...holding.toObject(),
+            price: liveStock.lastPrice,
+            day: liveStock.dayChange
+        }
+    })
+
+    return allValidHoldings;
+}
+
 router.post("/buyStock", isAuthenticated, async (req, res) => {
     try {
-        let { stock, qty, amount , funds} = req.body;
+        let { stock, qty, amount, funds } = req.body;
         qty = Number(qty)
         amount = Number(amount);
         let id = req.id;
@@ -43,18 +67,19 @@ router.post("/buyStock", isAuthenticated, async (req, res) => {
             name: stock.symbol,
             qty,
             avg: amount,
-            price: stock.lastPrice,
-            net: (stock.lastPrice * qty) - (amount * qty),
-            day: stock.dayChange,
             user: id
         })
 
-        let updatedUser = await User.findByIdAndUpdate(id , {availableMargin : funds - (qty * amount)} , {new : true});
+        let updatedUser = await User.findByIdAndUpdate(id, { availableMargin: funds - (qty * amount) }, { new: true });
+        let allOrders = await Order.find({ user: id });
+        let allHoldings = await findAllHoldings(id);
 
         return res.status(200).json({
             message: "Successfully Bought the share!",
             success: true,
-            availableMargin : updatedUser.availableMargin
+            availableMargin: updatedUser.availableMargin,
+            allOrders,
+            allHoldings
         })
 
     }
@@ -68,7 +93,7 @@ router.post("/buyStock", isAuthenticated, async (req, res) => {
 
 router.post("/sellStock", isAuthenticated, async (req, res) => {
     try {
-        let { stock, qty, amount , funds} = req.body;
+        let { stock, qty, amount, funds } = req.body;
         qty = Number(qty)
         amount = Number(amount);
         let id = req.id;
@@ -107,7 +132,7 @@ router.post("/sellStock", isAuthenticated, async (req, res) => {
             }
         }
 
-        let updatedUser = await User.findByIdAndUpdate(id , {availableMargin : funds + (qty * amount)} , {new : true});
+        let updatedUser = await User.findByIdAndUpdate(id, { availableMargin: funds + (qty * amount) }, { new: true });
 
         let newOrder = await Order.create({
             name: stock.symbol,
@@ -117,10 +142,15 @@ router.post("/sellStock", isAuthenticated, async (req, res) => {
             user: id
         })
 
+        let allOrders = await Order.find({ user: id });
+        let allHoldings = await findAllHoldings(id);
+
         return res.status(200).json({
             success: true,
             message: "Successfully sold the shares!",
-            availableMargin : updatedUser.availableMargin
+            availableMargin: updatedUser.availableMargin,
+            allOrders,
+            allHoldings
         })
     }
     catch (e) {
