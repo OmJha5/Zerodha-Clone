@@ -536,11 +536,14 @@ hr {
 
 .data .first small {
   font-size: 0.8rem;
-  color: rgb(72, 194, 55);
 }
 
 .data .first .profit {
   color: rgb(72, 194, 55);
+}
+
+.data .first .loss {
+  color: rgb(250, 118, 78);
 }
 
 .data hr {

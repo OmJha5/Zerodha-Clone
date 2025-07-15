@@ -22,7 +22,7 @@ export default function WatchListItem({stock}) {
             {
                 !showWatchListActions && (
                     <div className="itemInfo d-flex gap-3">
-                        <span className="percent">{stock.dayChange.toFixed(2)}</span>
+                        <span className="percent">{stock.dayChange.toFixed(2)}%</span>
 
                         {stock.dayChange < 0 ? <KeyboardArrowDown className='down' /> : <KeyboardArrowUp className='up'  />} 
 

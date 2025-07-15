@@ -3,9 +3,11 @@ import { Tooltip , Grow} from "@mui/material";
 import BarChartOutlined from '@mui/icons-material/BarChartOutlined';
 import { MoreHoriz } from '@mui/icons-material';
 import BuyDialog from './BuyDialog';
+import SellDialog from './SellDialog';
 
 export default function WatchListActions({stock}) {
   let [openBuy , setOpenBuy] = useState(false)
+  let [openSell , setOpenSell] = useState(false)
   
   return (
     <span className="actions">
@@ -23,7 +25,7 @@ export default function WatchListActions({stock}) {
             title="Sell (S)"
             placement="top"
         >
-            <button className='sell'>Sell</button>
+            <button className='sell' onClick={() => setOpenSell(true)}>Sell</button>
         </Tooltip> 
       </span>  
 
@@ -53,6 +55,9 @@ export default function WatchListActions({stock}) {
 
       {/* Dialog box when user clicks on buy button */}
       <BuyDialog open={openBuy} close={() => setOpenBuy(false)} stock={stock} /> 
+
+      {/* Dialog box when user clicks on sell button */}
+      <SellDialog open={openSell} close={() => setOpenSell(false)} stock={stock} /> 
 
 
     </span>

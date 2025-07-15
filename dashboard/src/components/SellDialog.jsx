@@ -6,7 +6,7 @@ import axios from 'axios';
 import { STOCKS_API_ENDPOINT } from '../../utils/apiendpoint';
 import { setFunds } from '../redux/fundSlice';
 
-export default function BuyDialog({ open, close, stock }) {
+export default function SellDialog({ open, close, stock }) {
     let dispatch = useDispatch();
     let funds = useSelector((state) => state.funds.availableMargin)
 
@@ -16,36 +16,31 @@ export default function BuyDialog({ open, close, stock }) {
     })
 
     let handleSubmit = async () => {
-        if (funds > (input.qty * input.amount)) {
-            try {
-                let res = await axios.post(`${STOCKS_API_ENDPOINT}/buyStock` , {stock , qty : input.qty , amount : input.amount , funds} , {
-                    headers : {
-                        "Content-Type" : "application/json"
-                    },
-                    withCredentials : true
-                })
-
-                if(res.data.success){
-                    dispatch(setFunds(res.data.availableMargin))
-                    toast.success(res.data.message)
-                    close(); 
-                }
-            }
-            catch (e) {
-                if (e?.response?.data?.message) {
-                    toast.error(e.response.data.message);
-                }
-                else toast.error("Internal Server Error!")
+        try {
+            let res = await axios.post(`${STOCKS_API_ENDPOINT}/sellStock`, { stock, qty: input.qty, amount: input.amount , funds}, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                withCredentials: true
+            })
+            
+            if (res.data.success) {
+                dispatch(setFunds(res.data.availableMargin))
+                toast.success(res.data.message)
+                close();
             }
         }
-        else {
-            toast.error("You don't have sufficient funds!")
+        catch (e) {
+            if (e?.response?.data?.message) {
+                toast.error(e.response.data.message);
+            }
+            else toast.error("Internal Server Error!")
         }
     }
 
     return (
         <Dialog open={open} onClose={close} maxWidth="xs" fullWidth>
-            <DialogTitle>Buying Stock</DialogTitle>
+            <DialogTitle>Selling Stock</DialogTitle>
             <DialogContent sx={{ display: 'flex', alignItems: 'center', gap: "20px" }}>
                 <TextField
                     autoFocus

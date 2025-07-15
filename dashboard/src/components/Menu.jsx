@@ -1,10 +1,18 @@
-import React , {useState} from 'react'
+import React , {useEffect, useState} from 'react'
 import {Link} from "react-router-dom"
 import UserSection from "./UserSection"
-export default function Menu() {
+import { useDispatch, useSelector } from 'react-redux';
+import { setMenu } from '../redux/authSlice';
 
-  const [selectedMenu , setSelectedMenu] = useState(0);
+export default function Menu() {
+  let dispatch = useDispatch();
+  let defaultStartingMenu = useSelector((state) => state.auth.menu);
+  const [selectedMenu , setSelectedMenu] = useState(defaultStartingMenu);
   const [isProfileDropDownOpen , setIsProfileDropDownOpen] = useState(false);
+
+  useEffect(() => {
+    dispatch(setMenu(selectedMenu));
+  } , selectedMenu)
 
   const handleMenuClick = (index) => {
     setSelectedMenu(index);
